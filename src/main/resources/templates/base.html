@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html
+  class="dark"
+  lang="en"
+  th:fragment="parent(content,title)"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
+    <title data-th-replace="${title}">SCM</title>
+  </head>
+  <body class="h-screen p-4 dark:bg-gray-900 dark:text-white">
+    <!-- common header -->
+    <nav data-th-replace="navbar::navbar"></nav>
+
+    <!-- main content -->
+    <div class="w-full">
+      <section data-th-replace="${content}"></section>
+    </div>
+
+    <!-- flowbite script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  </body>
+</html>
