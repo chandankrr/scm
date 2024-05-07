@@ -34,11 +34,13 @@ public class Contact {
     @Column(length = 1000)
     private String description;
 
+    @Builder.Default
     private boolean favorite = false;
 
     @ManyToOne()
     private User user;
 
+    @Builder.Default
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<SocialLink> links = new ArrayList<>();
 

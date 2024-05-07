@@ -37,17 +37,22 @@ public class User {
 
     private String phoneNumber;
 
+    @Builder.Default
     private boolean enabled = false;
 
+    @Builder.Default
     private boolean emailVerified = false;
 
+    @Builder.Default
     private boolean phoneVerified = false;
 
-    @Enumerated
+    @Builder.Default
+    @Enumerated(value = EnumType.STRING)
     private Providers provider = Providers.SELF;
 
     private String providerUserId;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Contact> contacts = new ArrayList<>();
 
