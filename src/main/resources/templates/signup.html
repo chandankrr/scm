@@ -27,6 +27,7 @@
               data-th-object="${userForm}"
               method="post"
               class="mt-5"
+              novalidate
             >
               <!-- name field -->
               <div class="mb-3">
@@ -43,6 +44,12 @@
                   placeholder="Enter name"
                   required
                 />
+
+                <p
+                  data-th-if="${#fields.hasErrors('name')}"
+                  data-th-errors="*{name}"
+                  class="text-red-600 py-1 px-1 text-sm"
+                ></p>
               </div>
 
               <!-- email field -->
@@ -60,6 +67,12 @@
                   placeholder="Enter email"
                   required
                 />
+
+                <p
+                  data-th-if="${#fields.hasErrors('email')}"
+                  data-th-errors="*{email}"
+                  class="text-red-600 py-1 px-1 text-sm"
+                ></p>
               </div>
 
               <!-- password field -->
@@ -77,6 +90,11 @@
                   placeholder="Enter password"
                   required
                 />
+                <p
+                  data-th-if="${#fields.hasErrors('password')}"
+                  data-th-errors="*{password}"
+                  class="text-red-600 py-1 px-1 text-sm"
+                ></p>
               </div>
 
               <!-- phone number field -->
@@ -93,6 +111,11 @@
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Enter contact number"
                 />
+                <p
+                  data-th-if="${#fields.hasErrors('phoneNumber')}"
+                  data-th-errors="*{phoneNumber}"
+                  class="text-red-600 py-1 px-1 text-sm"
+                ></p>
               </div>
 
               <!-- about text area -->

@@ -6,10 +6,12 @@ import com.chandankrr.scm.helpers.Message;
 import com.chandankrr.scm.helpers.MessageType;
 import com.chandankrr.scm.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -62,8 +64,14 @@ public class PageController {
     }
 
     @RequestMapping(value = "/do-register", method = RequestMethod.POST)
-    public String processRegister(@ModelAttribute UserForm userForm, HttpSession session) {
+    public String processRegister(@Valid @ModelAttribute UserForm userForm, BindingResult bindingResult,
+            HttpSession session) {
         log.info("Processing registration");
+
+        // validate useForm
+        if (bindingResult.hasErrors()) {
+            return "signup";
+        }
 
         User user = User.builder()
                 .name(userForm.getName())
