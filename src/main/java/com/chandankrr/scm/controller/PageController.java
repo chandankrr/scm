@@ -2,7 +2,10 @@ package com.chandankrr.scm.controller;
 
 import com.chandankrr.scm.entity.User;
 import com.chandankrr.scm.form.UserForm;
+import com.chandankrr.scm.helpers.Message;
+import com.chandankrr.scm.helpers.MessageType;
 import com.chandankrr.scm.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -59,7 +62,7 @@ public class PageController {
     }
 
     @RequestMapping(value = "/do-register", method = RequestMethod.POST)
-    public String processRegister(@ModelAttribute UserForm userForm) {
+    public String processRegister(@ModelAttribute UserForm userForm, HttpSession session) {
         log.info("Processing registration");
 
         User user = User.builder()
@@ -68,10 +71,19 @@ public class PageController {
                 .password(userForm.getPassword())
                 .phoneNumber(userForm.getPhoneNumber())
                 .about(userForm.getAbout())
-                .profilePic("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png")
+                .profilePic(
+                        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png")
                 .build();
 
         userService.saveUser(user);
+
+        Message message = Message.builder()
+                .content("Registration Successful")
+                .messageType(MessageType.green)
+                .build();
+
+        session.setAttribute("message", message);
+
         return "redirect:/signup";
     }
 }
