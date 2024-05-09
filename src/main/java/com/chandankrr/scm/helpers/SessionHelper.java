@@ -1,11 +1,10 @@
 package com.chandankrr.scm.helpers;
 
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import jakarta.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 

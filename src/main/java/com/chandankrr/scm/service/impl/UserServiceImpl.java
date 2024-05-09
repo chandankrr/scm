@@ -2,9 +2,11 @@ package com.chandankrr.scm.service.impl;
 
 import com.chandankrr.scm.entity.User;
 import com.chandankrr.scm.exception.ResourceNotFoundException;
+import com.chandankrr.scm.helpers.AppConstants;
 import com.chandankrr.scm.repository.UserRepository;
 import com.chandankrr.scm.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User saveUser(User user) {
@@ -24,6 +27,10 @@ public class UserServiceImpl implements UserService {
         user.setUserId(userId);
 
         // encode password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // set user role
+        user.setRoles(List.of(AppConstants.ROLE_USER));
 
         return userRepository.save(user);
     }
