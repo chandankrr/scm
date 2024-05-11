@@ -23,6 +23,12 @@ public class PageController {
 
     private final UserService userService;
 
+    @RequestMapping("/")
+    public String index() {
+        log.info("index page handler");
+        return "redirect:/home";
+    }
+
     @RequestMapping("/home")
     public String home() {
         log.info("Home page handler");
