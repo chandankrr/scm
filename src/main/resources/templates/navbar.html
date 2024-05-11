@@ -102,18 +102,20 @@
         </li>
       </ul>
       <div class="flex gap-3 mt-4">
-        <button
+        <a
+          data-th-href="@{'/login'}"
           type="button"
           class="px-4 py-2 text-sm font-medium text-center text-white bg-gray-700 rounded-lg md:hidden hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Login
-        </button>
-        <button
+        </a>
+        <a
+          data-th-href="@{'/signup'}"
           type="button"
           class="px-4 py-2 text-sm font-medium text-center text-white bg-gray-700 rounded-lg md:hidden hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Signup
-        </button>
+        </a>
       </div>
     </div>
   </div>
