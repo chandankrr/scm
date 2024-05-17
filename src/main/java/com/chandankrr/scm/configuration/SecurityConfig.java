@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 public class SecurityConfig {
 
     private final CustomUserDetailService userDetailService;
+    private final OAuthAuthenticationSuccessHandler oAuthAuthenticationSuccessHandler;
 
     // configuration of authentication provider spring security
     @Bean
@@ -30,6 +31,7 @@ public class SecurityConfig {
         return daoAuthenticationProvider;
     }
 
+    // configure security filter chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(authorize -> {
@@ -49,6 +51,12 @@ public class SecurityConfig {
         httpSecurity.logout(logoutForm -> {
             logoutForm.logoutUrl("/logout");
             logoutForm.logoutSuccessUrl("/login?logout=true");
+        });
+
+        // oauth configuration
+        httpSecurity.oauth2Login(oauth -> {
+            oauth.loginPage("/login");
+            oauth.successHandler(oAuthAuthenticationSuccessHandler);
         });
 
         return httpSecurity.build();
