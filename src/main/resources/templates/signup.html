@@ -48,7 +48,7 @@
                 <p
                   data-th-if="${#fields.hasErrors('name')}"
                   data-th-errors="*{name}"
-                  class="text-red-600 py-1 px-1 text-sm"
+                  class="px-1 py-1 text-sm text-red-600"
                 ></p>
               </div>
 
@@ -71,7 +71,7 @@
                 <p
                   data-th-if="${#fields.hasErrors('email')}"
                   data-th-errors="*{email}"
-                  class="text-red-600 py-1 px-1 text-sm"
+                  class="px-1 py-1 text-sm text-red-600"
                 ></p>
               </div>
 
@@ -93,7 +93,7 @@
                 <p
                   data-th-if="${#fields.hasErrors('password')}"
                   data-th-errors="*{password}"
-                  class="text-red-600 py-1 px-1 text-sm"
+                  class="px-1 py-1 text-sm text-red-600"
                 ></p>
               </div>
 
@@ -114,7 +114,7 @@
                 <p
                   data-th-if="${#fields.hasErrors('phoneNumber')}"
                   data-th-errors="*{phoneNumber}"
-                  class="text-red-600 py-1 px-1 text-sm"
+                  class="px-1 py-1 text-sm text-red-600"
                 ></p>
               </div>
 
@@ -150,6 +150,35 @@
                 </button>
               </div>
             </form>
+            <div class="flex flex-col items-center justify-center gap-3 mt-5">
+              <!-- Google Sign-In Link -->
+              <a
+                data-th-href="@{'/oauth2/authorization/google'}"
+                class="flex items-center px-4 py-2 bg-white border border-gray-300 rounded shadow hover:bg-gray-100"
+              >
+                <img
+                  src="https://www.google.com/favicon.ico"
+                  alt="Google Logo"
+                  class="w-5 h-5 mr-2"
+                />
+                <span class="text-sm font-medium text-gray-700"
+                  >Sign in with Google</span
+                >
+              </a>
+
+              <!-- GitHub Sign-In Link -->
+              <a
+                data-th-href="@{'/oauth2/authorization/github'}"
+                class="flex items-center px-4 py-2 text-white bg-gray-800 border rounded shadow dark: dark:text-black hover:bg-gray-700 dark:bg-white dark:border-gray-300 dark:hover:bg-gray-100"
+              >
+                <img
+                  src="https://github.githubassets.com/favicons/favicon.png"
+                  alt="GitHub Logo"
+                  class="w-5 h-5 mr-2 invert dark:invert-0"
+                />
+                <span class="text-sm font-medium">Sign in with GitHub</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
