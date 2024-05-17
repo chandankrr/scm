@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -33,30 +34,53 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         logger.info("Authentication success");
 
-        DefaultOAuth2User user = (DefaultOAuth2User) authentication.getPrincipal();
+        // identify provider
+        OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
 
-        String email = Objects.requireNonNull(user.getAttribute("email")).toString();
-        String name = Objects.requireNonNull(user.getAttribute("name")).toString();
-        String picture = Objects.requireNonNull(user.getAttribute("picture")).toString();
+        String authorizedClientRegistrationId = oAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
+        logger.info(authorizedClientRegistrationId);
 
-        // save user data to database
-        User user1 = User.builder()
-                .userId(UUID.randomUUID().toString())
-                .name(name)
-                .email(email)
-                .password("password")
-                .about("This account is created using google auth...")
-                .profilePic(picture)
-                .enabled(true)
-                .emailVerified(true)
-                .provider(Providers.GOOGLE)
-                .providerUserId(user.getName())
-                .roles(List.of(AppConstants.ROLE_USER))
-                .build();
+        DefaultOAuth2User oAuthUser = (DefaultOAuth2User) authentication.getPrincipal();
 
-        Optional<User> user2 = userRepository.findByEmail(email);
-        if (user2.isEmpty()) {
-            userRepository.save(user1);
+//        oAuthUser.getAttributes().forEach((key, value) -> {
+//            logger.info("{}: {}", key, value);
+//        });
+
+        // default/manual generated user details
+        User user = new User();
+        user.setUserId(UUID.randomUUID().toString());
+        user.setRoles(List.of(AppConstants.ROLE_USER));
+        user.setEmailVerified(true);
+        user.setEnabled(true);
+        user.setPassword("password");
+
+        // based on provider: saving the details in database
+        if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
+            user.setEmail(Objects.requireNonNull(oAuthUser.getAttribute("email")).toString());
+            user.setProfilePic(Objects.requireNonNull(oAuthUser.getAttribute("picture")).toString());
+            user.setName(Objects.requireNonNull(oAuthUser.getAttribute("name")).toString());
+            user.setProviderUserId(oAuthUser.getName());
+            user.setProvider(Providers.GOOGLE);
+            user.setAbout("This account is created using google auth...");
+
+        } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
+            user.setEmail(oAuthUser.getAttribute("email") != null ?
+                    Objects.requireNonNull(oAuthUser.getAttribute("email")).toString() :
+                    Objects.requireNonNull(oAuthUser.getAttribute("login")).toString() + "@gmail.com");
+            user.setProfilePic(Objects.requireNonNull(oAuthUser.getAttribute("avatar_url")).toString());
+            user.setName(oAuthUser.getAttribute("name") != null ?
+                    Objects.requireNonNull(oAuthUser.getAttribute("name")).toString() :
+                    Objects.requireNonNull(oAuthUser.getAttribute("login")).toString());
+            user.setProviderUserId(oAuthUser.getName());
+            user.setProvider(Providers.GITHUB);
+            user.setAbout("This account is created using github auth...");
+        } else {
+            logger.info("OAuthAuthenticationSuccessHandler: unknown oauth2 client registration id");
+        }
+
+        Optional<User> user1 = userRepository.findByEmail(user.getEmail());
+        if (user1.isEmpty()) {
+            userRepository.save(user);
             logger.info("User saved");
         }
 
